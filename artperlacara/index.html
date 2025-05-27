@@ -12,7 +12,7 @@
     body {
       margin: 0; /* sense marges externs */
       padding: 0; /* sense espais interns */
-      background-color: #f4f4f4; /* color de fons gris clar */
+      background-color: rgb(39, 33, 12); /* color de fons gris clar */
       display: flex; /* fa servir flexbox per alinear */
       justify-content: center; /* centra horitzontalment */
       align-items: center; /* centra verticalment */
@@ -65,6 +65,12 @@
     // Variables globals
     let faceapi, detections = [], video;
     let modelsMostrats = false;
+
+let happyOffset = 0;
+let sadOffset = 0;
+let angryShakeX = 0;
+let angryShakeY = 0;
+
 
     // Mida virtual que es manté proporcional a qualsevol pantalla
     const VIRTUAL_W = 800;
@@ -146,12 +152,26 @@
 
     // Dibuixa diferents figures depenent de l'estat emocional
     function drawArt(dominant, intensity) {
-      noFill();
+      
+      // Animación por emoció
+      if (dominant === 'happy') {
+        happyOffset = sin(frameCount * 0.2) * 20;
+        translate(0, happyOffset);
+      } else if (dominant === 'sad') {
+        sadOffset = sin(frameCount * 0.1) * 20;
+        translate(sadOffset, 0);
+      } else if (dominant === 'angry') {
+        angryShakeX = random(-10, 10);
+        angryShakeY = random(-10, 10);
+        translate(angryShakeX, angryShakeY);
+      }
+noFill();
       strokeWeight(4);
 
       switch (dominant) {
         case 'happy':
-          stroke(255,200,0); // groc
+          stroke(255,200,0);
+          fill(255, 240, 150); // groc
          beginShape();//cara
 vertex(240, 58.1875);
 vertex(203, 65.1875);
@@ -265,6 +285,7 @@ vertex(256, 57.1875);
 vertex(251, 57.1875);
 vertex(238, 59.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ull dret
 vertex(220, 245.1875);
 vertex(217, 243.1875);
@@ -295,7 +316,8 @@ vertex(207, 254.1875);
 vertex(214, 252.1875);
 vertex(221, 248.1875);
 endShape(CLOSE);
-        beginShape();//ull esquerra
+        fill(0);
+          beginShape();//ull esquerra
 vertex(277, 243.1875);
 vertex(281, 246.1875);
 vertex(287, 247.1875);
@@ -317,6 +339,7 @@ vertex(279, 238.1875);
 vertex(276, 239.1875);
 vertex(275, 242.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//boca
 vertex(226, 336.1875);
 vertex(227, 335.1875);
@@ -352,6 +375,7 @@ vertex(235, 343.1875);
 vertex(229, 341.1875);
 vertex(227, 337.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ceja dreta
 vertex(211, 215.1875);
 vertex(212, 215.1875);
@@ -406,6 +430,7 @@ vertex(207, 214.1875);
 vertex(208, 214.1875);
 vertex(210, 213.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ceja esquerra
 vertex(333, 212.1875);
 vertex(333, 212.1875);
@@ -458,7 +483,8 @@ endShape(CLOSE);
           break;
 
         case 'sad':
-          stroke(50,100,200,150); // blau
+          stroke(50,100,200,150);
+          fill(180, 200, 255); // blau
            beginShape();//cara
 vertex(240, 58.1875);
 vertex(203, 65.1875);
@@ -572,6 +598,7 @@ vertex(256, 57.1875);
 vertex(251, 57.1875);
 vertex(238, 59.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ull dret
 vertex(220, 245.1875);
 vertex(217, 243.1875);
@@ -602,7 +629,8 @@ vertex(207, 254.1875);
 vertex(214, 252.1875);
 vertex(221, 248.1875);
 endShape(CLOSE);
-        beginShape();//ull esquerra
+        fill(0);
+          beginShape();//ull esquerra
 vertex(277, 243.1875);
 vertex(281, 246.1875);
 vertex(287, 247.1875);
@@ -624,6 +652,7 @@ vertex(279, 238.1875);
 vertex(276, 239.1875);
 vertex(275, 242.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//boca
 vertex(219, 351.1875);
 vertex(219, 350.1875);
@@ -711,6 +740,7 @@ vertex(222, 349.1875);
 vertex(221, 349.1875);
 vertex(221, 349.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ceja dreta
 vertex(218, 218.1875);
 vertex(217, 218.1875);
@@ -776,6 +806,7 @@ vertex(217, 215.1875);
 vertex(217, 216.1875);
 vertex(216, 217.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ceja esquerra
 vertex(270, 207.1875);
 vertex(272, 206.1875);
@@ -849,7 +880,8 @@ endShape(CLOSE);
           break;
 
         case 'angry':
-          stroke(200,0,0,150); // vermell
+          stroke(200,0,0,150);
+          fill(255, 180, 180); // vermell
            beginShape();//cara
 vertex(240, 58.1875);
 vertex(203, 65.1875);
@@ -963,6 +995,7 @@ vertex(256, 57.1875);
 vertex(251, 57.1875);
 vertex(238, 59.1875);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ull dret
 vertex(207, 238.3625030517578);
 vertex(208, 239.3625030517578);
@@ -1043,7 +1076,8 @@ vertex(204, 237.3625030517578);
 vertex(205, 237.3625030517578);
 vertex(206, 237.3625030517578);
 endShape(CLOSE);
-        beginShape();//ull esquerra
+        fill(0);
+          beginShape();//ull esquerra
 vertex(274, 243.3625030517578);
 vertex(275, 243.3625030517578);
 vertex(275, 242.3625030517578);
@@ -1120,6 +1154,7 @@ vertex(275, 246.3625030517578);
 vertex(274, 245.3625030517578);
 vertex(274, 244.3625030517578);
 endShape(CLOSE);
+          fill(0);
           beginShape();//boca
 vertex(220, 340.1640625);
 vertex(220, 340.1640625);
@@ -1193,6 +1228,7 @@ vertex(223, 342.1640625);
 vertex(222, 342.1640625);
 vertex(221, 342.1640625);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ceja dreta
 vertex(173, 210.1624984741211);
 vertex(174, 210.1624984741211);
@@ -1266,6 +1302,7 @@ vertex(175, 209.1624984741211);
 vertex(176, 210.1624984741211);
 vertex(177, 210.1624984741211);
 endShape(CLOSE);
+          fill(0);
           beginShape();//ceja esquerra
 vertex(267, 220.5625);
 vertex(268, 220.5625);
@@ -1339,41 +1376,162 @@ vertex(268, 219.5625);
 endShape(CLOSE);
           break;
 
-        case 'fearful':
-          stroke(100,100,100,150); // gris
+        
+case 'fearful':
+          stroke(255,182,193,150);
+          fill(255, 210, 220); // rosapalo
+          beginShape(); // cara
+          vertex(240, 58); vertex(203, 65); vertex(184, 71); vertex(168, 80); vertex(163, 88);
+          vertex(158, 103); vertex(151, 111); vertex(140, 118); vertex(131, 123); vertex(123, 140);
+          vertex(121, 151); vertex(121, 165); vertex(126, 177); vertex(127, 193); vertex(123, 202);
+          vertex(117, 206); vertex(119, 217); vertex(123, 222); vertex(128, 226); vertex(132, 236);
+          vertex(133, 251); vertex(134, 266); vertex(138, 278); vertex(144, 285); vertex(154, 291);
+          vertex(164, 292); vertex(167, 291); vertex(168, 297); vertex(173, 313); vertex(179, 323);
+          vertex(184, 340); vertex(189, 350); vertex(193, 356); vertex(204, 368); vertex(219, 381);
+          vertex(231, 392); vertex(252, 399); vertex(264, 403); vertex(284, 402); vertex(304, 397);
+          vertex(319, 388); vertex(334, 373); vertex(345, 355); vertex(350, 332); vertex(354, 307);
+          vertex(361, 297); vertex(362, 312); vertex(358, 331); vertex(355, 343); vertex(354, 351);
+          vertex(354, 359); vertex(354, 366); vertex(357, 370); vertex(361, 372); vertex(363, 376);
+          vertex(365, 381); vertex(372, 387); vertex(375, 385); vertex(376, 375); vertex(380, 359);
+          vertex(391, 349); vertex(393, 344); vertex(396, 333); vertex(396, 322); vertex(395, 318);
+          vertex(393, 314); vertex(393, 311); vertex(395, 301); vertex(400, 297); vertex(405, 288);
+          vertex(410, 278); vertex(415, 269); vertex(419, 265); vertex(424, 253); vertex(428, 237);
+          vertex(431, 222); vertex(433, 211); vertex(432, 200); vertex(428, 193); vertex(425, 186);
+          vertex(424, 181); vertex(422, 176); vertex(420, 163); vertex(420, 148); vertex(420, 135);
+          vertex(416, 118); vertex(410, 112); vertex(403, 109); vertex(399, 101); vertex(397, 91);
+          vertex(383, 83); vertex(377, 80); vertex(366, 75); vertex(358, 70); vertex(347, 67);
+          vertex(343, 68); vertex(334, 68); vertex(331, 60); vertex(322, 55); vertex(314, 59);
+          vertex(310, 60); vertex(307, 56); vertex(300, 55); vertex(296, 56); vertex(289, 56);
+          vertex(281, 58); vertex(281, 62); vertex(272, 54); vertex(256, 57); vertex(251, 57);
+          vertex(238, 59);
+          endShape(CLOSE);
+
+          beginShape(); // ull dret obert gran
+          vertex(190, 240); vertex(185, 238); vertex(180, 240); vertex(178, 245); vertex(180, 250);
+          vertex(185, 252); vertex(190, 250); vertex(192, 245);
+          endShape(CLOSE);
+
+          beginShape(); // ull esquerra obert gran
+          vertex(290, 240); vertex(285, 238); vertex(280, 240); vertex(278, 245); vertex(280, 250);
+          vertex(285, 252); vertex(290, 250); vertex(292, 245);
+          endShape(CLOSE);
+
+          beginShape(); // boca ovalada oberta (espant)
+          vertex(235, 330); bezierVertex(240, 360, 270, 360, 275, 330);
+          bezierVertex(270, 350, 240, 350, 235, 330);
+          endShape(CLOSE);
+
+          beginShape(); // celles arquejades cap amunt
+          vertex(180, 210); vertex(185, 205); vertex(195, 200); vertex(205, 205); vertex(210, 210);
+          endShape();
+
           beginShape();
-          for (let x = 0; x <= VIRTUAL_W; x += 10) {
-            let y = VIRTUAL_H/2 + 50 * sin((x - VIRTUAL_W/2) * 0.05) * intensity;
-            vertex(x, y);
-          }
+          vertex(280, 210); vertex(285, 205); vertex(295, 200); vertex(305, 205); vertex(310, 210);
           endShape();
           break;
 
-        case 'surprised':
-          stroke(0,150,255,150); // blau clar
-          beginShape();
-          for (let i = 0; i < 20; i++) {
-            let angle = random(TWO_PI);
-            let r = 50 + 100 * intensity;
-            let x = VIRTUAL_W/2 + r * cos(angle);
-            let y = VIRTUAL_H/2 + r * sin(angle);
-            vertex(x, y);
-          }
+
+        
+case 'surprised':
+          stroke(0,150,255,150);
+          fill(200, 230, 255); // blau clar
+          beginShape(); // cara
+          vertex(240, 58); vertex(203, 65); vertex(184, 71); vertex(168, 80); vertex(163, 88);
+          vertex(158, 103); vertex(151, 111); vertex(140, 118); vertex(131, 123); vertex(123, 140);
+          vertex(121, 151); vertex(121, 165); vertex(126, 177); vertex(127, 193); vertex(123, 202);
+          vertex(117, 206); vertex(119, 217); vertex(123, 222); vertex(128, 226); vertex(132, 236);
+          vertex(133, 251); vertex(134, 266); vertex(138, 278); vertex(144, 285); vertex(154, 291);
+          vertex(164, 292); vertex(167, 291); vertex(168, 297); vertex(173, 313); vertex(179, 323);
+          vertex(184, 340); vertex(189, 350); vertex(193, 356); vertex(204, 368); vertex(219, 381);
+          vertex(231, 392); vertex(252, 399); vertex(264, 403); vertex(284, 402); vertex(304, 397);
+          vertex(319, 388); vertex(334, 373); vertex(345, 355); vertex(350, 332); vertex(354, 307);
+          vertex(361, 297); vertex(362, 312); vertex(358, 331); vertex(355, 343); vertex(354, 351);
+          vertex(354, 359); vertex(354, 366); vertex(357, 370); vertex(361, 372); vertex(363, 376);
+          vertex(365, 381); vertex(372, 387); vertex(375, 385); vertex(376, 375); vertex(380, 359);
+          vertex(391, 349); vertex(393, 344); vertex(396, 333); vertex(396, 322); vertex(395, 318);
+          vertex(393, 314); vertex(393, 311); vertex(395, 301); vertex(400, 297); vertex(405, 288);
+          vertex(410, 278); vertex(415, 269); vertex(419, 265); vertex(424, 253); vertex(428, 237);
+          vertex(431, 222); vertex(433, 211); vertex(432, 200); vertex(428, 193); vertex(425, 186);
+          vertex(424, 181); vertex(422, 176); vertex(420, 163); vertex(420, 148); vertex(420, 135);
+          vertex(416, 118); vertex(410, 112); vertex(403, 109); vertex(399, 101); vertex(397, 91);
+          vertex(383, 83); vertex(377, 80); vertex(366, 75); vertex(358, 70); vertex(347, 67);
+          vertex(343, 68); vertex(334, 68); vertex(331, 60); vertex(322, 55); vertex(314, 59);
+          vertex(310, 60); vertex(307, 56); vertex(300, 55); vertex(296, 56); vertex(289, 56);
+          vertex(281, 58); vertex(281, 62); vertex(272, 54); vertex(256, 57); vertex(251, 57);
+          vertex(238, 59);
           endShape(CLOSE);
+
+          beginShape(); // ulls rodons grans
+          ellipse(190, 245, 20, 20);
+          ellipse(290, 245, 20, 20);
+          endShape();
+
+          beginShape(); // boca molt oberta rodona
+          ellipse(240, 340, 30, 40);
+          endShape();
+
+          beginShape(); // celles arquejades molt
+          vertex(180, 205); vertex(190, 195); vertex(200, 205);
+          endShape();
+
+          beginShape();
+          vertex(280, 205); vertex(290, 195); vertex(300, 205);
+          endShape();
           break;
 
-        case 'disgusted':
-          stroke(0,150,0,150); // verd
-          beginShape();
-          for (let i = 0; i < 12; i++) {
-            let angle = map(i, 0, 12, 0, TWO_PI);
-            let r = 75 + random(-50, 50) * intensity;
-            let x = VIRTUAL_W/2 + r * cos(angle);
-            let y = VIRTUAL_H/2 + r * sin(angle);
-            vertex(x, y);
-          }
+
+        
+case 'disgusted':
+          stroke(0,150,0,150);
+          fill(180, 255, 180); // verd
+          beginShape(); // cara
+          vertex(240, 58); vertex(203, 65); vertex(184, 71); vertex(168, 80); vertex(163, 88);
+          vertex(158, 103); vertex(151, 111); vertex(140, 118); vertex(131, 123); vertex(123, 140);
+          vertex(121, 151); vertex(121, 165); vertex(126, 177); vertex(127, 193); vertex(123, 202);
+          vertex(117, 206); vertex(119, 217); vertex(123, 222); vertex(128, 226); vertex(132, 236);
+          vertex(133, 251); vertex(134, 266); vertex(138, 278); vertex(144, 285); vertex(154, 291);
+          vertex(164, 292); vertex(167, 291); vertex(168, 297); vertex(173, 313); vertex(179, 323);
+          vertex(184, 340); vertex(189, 350); vertex(193, 356); vertex(204, 368); vertex(219, 381);
+          vertex(231, 392); vertex(252, 399); vertex(264, 403); vertex(284, 402); vertex(304, 397);
+          vertex(319, 388); vertex(334, 373); vertex(345, 355); vertex(350, 332); vertex(354, 307);
+          vertex(361, 297); vertex(362, 312); vertex(358, 331); vertex(355, 343); vertex(354, 351);
+          vertex(354, 359); vertex(354, 366); vertex(357, 370); vertex(361, 372); vertex(363, 376);
+          vertex(365, 381); vertex(372, 387); vertex(375, 385); vertex(376, 375); vertex(380, 359);
+          vertex(391, 349); vertex(393, 344); vertex(396, 333); vertex(396, 322); vertex(395, 318);
+          vertex(393, 314); vertex(393, 311); vertex(395, 301); vertex(400, 297); vertex(405, 288);
+          vertex(410, 278); vertex(415, 269); vertex(419, 265); vertex(424, 253); vertex(428, 237);
+          vertex(431, 222); vertex(433, 211); vertex(432, 200); vertex(428, 193); vertex(425, 186);
+          vertex(424, 181); vertex(422, 176); vertex(420, 163); vertex(420, 148); vertex(420, 135);
+          vertex(416, 118); vertex(410, 112); vertex(403, 109); vertex(399, 101); vertex(397, 91);
+          vertex(383, 83); vertex(377, 80); vertex(366, 75); vertex(358, 70); vertex(347, 67);
+          vertex(343, 68); vertex(334, 68); vertex(331, 60); vertex(322, 55); vertex(314, 59);
+          vertex(310, 60); vertex(307, 56); vertex(300, 55); vertex(296, 56); vertex(289, 56);
+          vertex(281, 58); vertex(281, 62); vertex(272, 54); vertex(256, 57); vertex(251, 57);
+          vertex(238, 59);
           endShape(CLOSE);
+
+          beginShape(); // ull dret petit i replegat
+          vertex(190, 240); vertex(185, 242); vertex(180, 240); vertex(185, 238);
+          endShape(CLOSE);
+
+          beginShape(); // ull esquerra petit i replegat
+          vertex(290, 240); vertex(285, 242); vertex(280, 240); vertex(285, 238);
+          endShape(CLOSE);
+
+          beginShape(); // boca torçada per fàstic
+          vertex(230, 340); bezierVertex(240, 345, 260, 330, 270, 340);
+          bezierVertex(260, 342, 240, 355, 230, 340);
+          endShape(CLOSE);
+
+          beginShape(); // celles arrufades
+          vertex(180, 210); vertex(190, 208); vertex(200, 210);
+          endShape();
+
+          beginShape();
+          vertex(280, 210); vertex(290, 208); vertex(300, 210);
+          endShape();
           break;
+
 
         default:
           stroke(150,150,150,150); // gris suau
